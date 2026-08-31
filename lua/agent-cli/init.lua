@@ -50,6 +50,9 @@ function M:add_file()
 		return vim.notify("Please Open Agent Cli!", vim.log.levels.WARN, { title = "agent-cli.nvim" })
 	end
 	fn.chansend(self.job_id, "@" .. api.nvim_buf_get_name(0))
+	if not api.nvim_win_is_valid(self.winid) then
+		self:toggle()
+	end
 	api.nvim_set_current_win(self.winid)
 	cmd("startinsert!")
 end
@@ -66,6 +69,9 @@ function M:add_snippet()
 	local end_line = end_pos[2] - 1
 	local msg = ("Please read %s#L%d-L%d\n"):format(api.nvim_buf_get_name(0), start_line, end_line)
 	fn.chansend(self.job_id, msg)
+	if not api.nvim_win_is_valid(self.winid) then
+		self:toggle()
+	end
 	api.nvim_set_current_win(self.winid)
 	cmd("startinsert!")
 end
